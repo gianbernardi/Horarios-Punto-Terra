@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¿Quién está hoy?</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F4F1EC;
+    --surface: #FFFFFF;
+    --border: rgba(0,0,0,0.09);
+    --border-strong: rgba(0,0,0,0.15);
+    --text-primary: #1A1A18;
+    --text-secondary: #6B6B67;
+    --text-tertiary: #A8A8A4;
+    --radius: 14px;
+    --radius-sm: 8px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.05);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 24px 16px 48px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  header h1 {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ── NOW CARD ── */
+  .now-card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    margin-bottom: 16px;
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .now-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .now-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-tertiary);
+  }
+
+  .now-datetime {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .now-people {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    min-height: 72px;
+    align-items: center;
+  }
+
+  .avatar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .avatar-circle {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .avatar-name {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .now-empty {
+    color: var(--text-tertiary);
+    font-size: 14px;
+  }
+
+  /* ── SCHEDULE CARD ── */
+  .schedule-card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ── LEGEND ── */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .legend-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+  }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+
+  .tab {
+    padding: 5px 13px;
+    border-radius: var(--radius-sm);
+    border: 0.5px solid var(--border-strong);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    background: transparent;
+    color: var(--text-secondary);
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.12s, color 0.12s;
+  }
+
+  .tab:hover { background: var(--bg); }
+
+  .tab.active {
+    background: var(--text-primary);
+    color: #fff;
+    border-color: var(--text-primary);
+  }
+
+  /* ── TABLE ── */
+  .table-label {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .franco-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    background: #F4F1EC;
+    color: var(--text-secondary);
+    border: 0.5px solid var(--border-strong);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  thead th {
+    text-align: left;
+    padding: 6px 8px;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-tertiary);
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  tbody td {
+    padding: 6px 8px;
+    border-bottom: 0.5px solid var(--border);
+    vertical-align: middle;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  tbody tr.current td {
+    background: #F4F1EC;
+  }
+
+  .time-cell {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    width: 56px;
+  }
+
+  .now-indicator {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #1A1A18;
+    margin-left: 4px;
+    vertical-align: middle;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .pill {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    margin: 2px 2px 2px 0;
+  }
+
+  .empty { color: var(--text-tertiary); }
+
+  @media (max-width: 480px) {
+    body { padding: 16px 12px 40px; }
+    .now-card, .schedule-card { padding: 16px; }
+    .avatar-circle { width: 48px; height: 48px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>¿Quién está hoy?</h1>
+</header>
+
+<div class="now-card">
+  <div class="now-header">
+    <span class="now-label">En el negocio ahora</span>
+    <span class="now-datetime" id="now-time"></span>
+  </div>
+  <div class="now-people" id="now-people"></div>
+</div>
+
+<div class="schedule-card">
+  <div class="legend" id="legend"></div>
+  <div class="tabs" id="tabs"></div>
+  <div class="table-label" id="table-label"></div>
+  <table>
+    <thead><tr><th>Hora</th><th>Quién está</th></tr></thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<script>
+const COLORS = {
+  Isa:    { bg:'#9FE1CB', text:'#085041' },
+  Jose:   { bg:'#B5D4F4', text:'#0C447C' },
+  Dani:   { bg:'#FAC775', text:'#633806' },
+  Yane:   { bg:'#F4C0D1', text:'#72243E' },
+  Chape:  { bg:'#AFA9EC', text:'#26215C' },
+  Eli:    { bg:'#F5C4B3', text:'#4A1B0C' },
+  Paulina:{ bg:'#C0DD97', text:'#173404' },
+  Cande:  { bg:'#D3D1C7', text:'#2C2C2A' },
+};
+
+const FRANCO = { Lunes:'Isa', Martes:'Jose', Miercoles:'Yane' };
+
+const DAY_ORDER = ['Lunes','Martes','Miercoles','Jueves','Viernes','Sab','Domingo'];
+const DAY_LABELS = { Lunes:'Lunes', Martes:'Martes', Miercoles:'Miércoles', Jueves:'Jueves', Viernes:'Viernes', Sab:'Sábado', Domingo:'Domingo' };
+const JS_DAYS = ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sab'];
+
+const SLOTS = ['07:30','08:30','09:30','10:30','11:30','12:30','13:30','14:30','15:30','16:30','17:30','18:30','19:30','20:30','21:30','22:30','23:30','00:30'];
+
+const RAW = {
+  Lunes:     {'07:30':['Isa'],'08:30':['Isa'],'09:30':['Isa'],'10:30':['Isa'],'11:30':['Isa'],'12:30':['Isa'],'13:30':['Isa'],'14:30':['Isa'],'15:30':['Isa'],'16:30':['Dani','Yane'],'17:30':['Dani','Yane'],'18:30':['Dani','Yane'],'19:30':['Dani','Yane'],'20:30':['Dani','Yane'],'21:30':['Dani','Yane'],'22:30':['Dani','Yane'],'23:30':['Dani','Yane']},
+  Martes:    {'07:30':['Jose'],'08:30':['Jose'],'09:30':['Jose'],'10:30':['Jose'],'11:30':['Jose'],'12:30':['Jose'],'13:30':['Jose'],'14:30':['Jose'],'15:30':['Jose'],'16:30':['Yane','Dani'],'17:30':['Yane','Dani'],'18:30':['Yane','Dani'],'19:30':['Yane','Dani'],'20:30':['Yane','Dani'],'21:30':['Yane','Dani'],'22:30':['Yane','Dani'],'23:30':['Yane','Dani']},
+  Miercoles: {'07:30':['Isa'],'08:30':['Isa'],'09:30':['Isa'],'10:30':['Isa'],'11:30':['Isa'],'12:30':['Isa'],'13:30':['Isa'],'14:30':['Isa'],'15:30':['Isa'],'16:30':['Jose','Dani'],'17:30':['Jose','Dani'],'18:30':['Jose','Dani'],'19:30':['Jose','Dani'],'20:30':['Jose','Dani'],'21:30':['Jose','Dani'],'22:30':['Jose','Dani'],'23:30':['Jose','Dani']},
+  Jueves:    {'07:30':['Isa'],'08:30':['Isa'],'09:30':['Isa'],'10:30':['Isa'],'11:30':['Isa'],'12:30':['Isa'],'13:30':['Isa'],'14:30':['Isa'],'15:30':['Isa'],'16:30':['Yane','Jose'],'17:30':['Yane','Jose'],'18:30':['Yane','Jose'],'19:30':['Yane','Jose'],'20:30':['Yane','Jose'],'21:30':['Yane','Jose'],'22:30':['Yane','Jose'],'23:30':['Yane','Jose']},
+  Viernes:   {'07:30':['Isa'],'08:30':['Isa'],'09:30':['Isa'],'10:30':['Isa'],'11:30':['Isa'],'12:30':['Isa'],'13:30':['Isa'],'14:30':['Isa'],'15:30':['Isa'],'16:30':['Jose','Yane','Chape','Eli'],'17:30':['Jose','Yane','Chape','Eli'],'18:30':['Jose','Yane','Chape','Eli'],'19:30':['Jose','Yane','Chape','Eli'],'20:30':['Jose','Yane','Chape','Eli'],'21:30':['Jose','Yane','Chape','Eli'],'22:30':['Jose','Yane'],'23:30':['Jose','Yane'],'00:30':['Jose','Yane']},
+  Sab:       {'07:30':['Isa','Paulina'],'08:30':['Isa','Paulina'],'09:30':['Isa','Dani','Cande','Paulina'],'10:30':['Isa','Dani','Cande','Paulina'],'11:30':['Isa','Dani','Cande','Paulina'],'12:30':['Isa','Dani','Cande','Paulina'],'13:30':['Isa','Paulina'],'14:30':['Isa','Paulina'],'15:30':['Isa','Paulina'],'16:30':['Jose','Yane','Dani','Eli'],'17:30':['Jose','Yane','Dani','Eli'],'18:30':['Jose','Yane','Dani','Eli'],'19:30':['Jose','Yane','Dani','Eli'],'20:30':['Jose','Yane','Dani','Eli'],'21:30':['Jose','Yane','Dani','Eli'],'22:30':['Jose','Yane'],'23:30':['Jose','Yane']},
+  Domingo:   {'07:30':['Isa','Paulina'],'08:30':['Isa','Paulina'],'09:30':['Isa','Chape','Cande','Paulina'],'10:30':['Isa','Chape','Cande','Paulina'],'11:30':['Isa','Chape','Cande','Paulina'],'12:30':['Isa','Chape','Cande','Paulina'],'13:30':['Isa','Paulina'],'14:30':['Isa','Paulina'],'15:30':['Isa','Paulina'],'16:30':['Jose','Yane','Chape','Eli'],'17:30':['Jose','Yane','Chape','Eli'],'18:30':['Jose','Yane','Chape','Eli'],'19:30':['Jose','Yane','Chape','Eli'],'20:30':['Jose','Yane','Chape','Eli'],'21:30':['Jose','Yane','Chape','Eli'],'22:30':['Jose','Yane'],'23:30':['Jose','Yane']},
+};
+
+function slotMins(slot) {
+  const [h, m] = slot.split(':').map(Number);
+  return (h === 0 ? 1440 : h * 60) + m;
+}
+
+function getCurrentSlot(h, m) {
+  const now = (h === 0 ? 1440 : h * 60) + m;
+  let best = null;
+  for (const s of SLOTS) { if (slotMins(s) <= now) best = s; }
+  return best;
+}
+
+function getNow() {
+  const d = new Date();
+  const h = d.getHours(), m = d.getMinutes();
+  const pad = n => String(n).padStart(2,'0');
+  return { dayName: JS_DAYS[d.getDay()], h, m, timeStr: `${pad(h)}:${pad(m)}` };
+}
+
+function pill(name) {
+  const c = COLORS[name] || { bg:'#D3D1C7', text:'#2C2C2A' };
+  return `<span class="pill" style="background:${c.bg};color:${c.text}">${name}</span>`;
+}
+
+function avatar(name) {
+  const c = COLORS[name] || { bg:'#D3D1C7', text:'#2C2C2A' };
+  return `<div class="avatar"><div class="avatar-circle" style="background:${c.bg};color:${c.text}">${name.slice(0,2).toUpperCase()}</div><div class="avatar-name">${name}</div></div>`;
+}
+
+function renderNow() {
+  const { dayName, h, m, timeStr } = getNow();
+  document.getElementById('now-time').textContent = `${DAY_LABELS[dayName] || dayName} ${timeStr}`;
+  const slot = getCurrentSlot(h, m);
+  const all = slot ? ((RAW[dayName] || {})[slot] || []) : [];
+  const franco = FRANCO[dayName];
+  const active = all.filter(p => p !== franco);
+  document.getElementById('now-people').innerHTML = active.length === 0
+    ? `<span class="now-empty">Nadie en turno en este momento</span>`
+    : active.map(avatar).join('');
+}
+
+function renderLegend() {
+  document.getElementById('legend').innerHTML = Object.entries(COLORS).map(([n,c]) =>
+    `<div class="legend-item"><div class="legend-dot" style="background:${c.bg}"></div>${n}</div>`
+  ).join('');
+}
+
+function renderTabs(sel) {
+  document.getElementById('tabs').innerHTML = DAY_ORDER.map(d =>
+    `<button class="tab ${d===sel?'active':''}" onclick="selectDay('${d}')">${DAY_LABELS[d]}</button>`
+  ).join('');
+}
+
+function renderTable(dayName) {
+  const { dayName: today, h, m } = getNow();
+  const currentSlot = dayName === today ? getCurrentSlot(h, m) : null;
+  const franco = FRANCO[dayName];
+  let lbl = DAY_LABELS[dayName];
+  if (franco) lbl += ` <span class="franco-badge">Franco: ${franco}</span>`;
+  document.getElementById('table-label').innerHTML = lbl;
+
+  document.getElementById('tbody').innerHTML = SLOTS.map(slot => {
+    const people = (RAW[dayName] || {})[slot] || [];
+    const isCurrent = slot === currentSlot;
+    const timeCell = isCurrent
+      ? `<td class="time-cell">${slot}<span class="now-indicator"></span></td>`
+      : `<td class="time-cell">${slot}</td>`;
+    const peopleCells = people.length === 0
+      ? `<td class="empty">—</td>`
+      : `<td>${people.map(pill).join('')}</td>`;
+    return `<tr class="${isCurrent?'current':''}">${timeCell}${peopleCells}</tr>`;
+  }).join('');
+}
+
+let selectedDay = getNow().dayName;
+if (!RAW[selectedDay]) selectedDay = 'Lunes';
+
+function selectDay(day) {
+  selectedDay = day;
+  renderTabs(day);
+  renderTable(day);
+}
+
+function tick() {
+  renderNow();
+  renderTable(selectedDay);
+}
+
+renderLegend();
+renderTabs(selectedDay);
+tick();
+setInterval(tick, 30000);
+</script>
+</body>
+</html>
