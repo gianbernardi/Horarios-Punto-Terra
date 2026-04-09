@@ -7,353 +7,89 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --bg: #F4F1EC;
-    --surface: #FFFFFF;
-    --border: rgba(0,0,0,0.09);
-    --border-strong: rgba(0,0,0,0.15);
-    --text-primary: #1A1A18;
-    --text-secondary: #6B6B67;
-    --text-tertiary: #A8A8A4;
-    --radius: 14px;
-    --radius-sm: 8px;
+    --bg: #F4F1EC; --surface: #FFFFFF;
+    --border: rgba(0,0,0,0.09); --border-strong: rgba(0,0,0,0.15);
+    --text-primary: #1A1A18; --text-secondary: #6B6B67; --text-tertiary: #A8A8A4;
+    --radius: 14px; --radius-sm: 8px;
     --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.05);
   }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text-primary);
-    min-height: 100vh;
-    padding: 24px 16px 48px;
-  }
-
-  header {
-    text-align: center;
-    margin-bottom: 28px;
-  }
-
-  header h1 {
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--text-secondary);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .card {
-    background: var(--surface);
-    border: 0.5px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    max-width: 680px;
-    margin: 0 auto 16px;
-  }
-
-  /* ── NOW CARD ── */
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text-primary); min-height: 100vh; padding: 24px 16px 48px; }
+  header { text-align: center; margin-bottom: 28px; }
+  header h1 { font-size: 15px; font-weight: 500; color: var(--text-secondary); letter-spacing: 0.08em; text-transform: uppercase; }
+  .card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); max-width: 680px; margin: 0 auto 16px; }
   .now-card { padding: 24px; }
-
-  .now-header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-
-  .now-label {
-    font-size: 11px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text-tertiary);
-  }
-
-  .now-datetime {
-    font-family: 'DM Mono', monospace;
-    font-size: 13px;
-    color: var(--text-secondary);
-  }
-
-  .now-people {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    min-height: 72px;
-    align-items: center;
-  }
-
+  .now-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 20px; }
+  .now-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-tertiary); }
+  .now-datetime { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--text-secondary); }
+  .now-people { display: flex; flex-wrap: wrap; gap: 16px; min-height: 72px; align-items: center; }
   .avatar { display: flex; flex-direction: column; align-items: center; gap: 6px; }
   .avatar-circle { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600; }
   .avatar-name { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
   .now-empty { color: var(--text-tertiary); font-size: 14px; }
-
-  /* ── CHATBOT ── */
+  .now-note { font-size: 11px; color: var(--text-tertiary); margin-top: 10px; font-style: italic; }
   .chat-card { padding: 0; overflow: hidden; }
-
-  .chat-header {
-    padding: 14px 20px;
-    border-bottom: 0.5px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .chat-header-dot {
-    width: 8px; height: 8px; border-radius: 50%; background: #9FE1CB;
-    animation: pulse 2s ease-in-out infinite;
-  }
-
-  .chat-header-title {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-primary);
-  }
-
-  .chat-header-sub {
-    font-size: 12px;
-    color: var(--text-tertiary);
-    margin-left: auto;
-  }
-
-  .chat-messages {
-    height: 240px;
-    overflow-y: auto;
-    padding: 16px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    scroll-behavior: smooth;
-  }
-
-  .msg {
-    max-width: 85%;
-    padding: 10px 14px;
-    border-radius: 12px;
-    font-size: 14px;
-    line-height: 1.5;
-  }
-
-  .msg.bot {
-    background: var(--bg);
-    color: var(--text-primary);
-    border-radius: 4px 12px 12px 12px;
-    align-self: flex-start;
-  }
-
-  .msg.user {
-    background: var(--text-primary);
-    color: #fff;
-    border-radius: 12px 4px 12px 12px;
-    align-self: flex-end;
-  }
-
-  .msg.typing {
-    background: var(--bg);
-    align-self: flex-start;
-    border-radius: 4px 12px 12px 12px;
-    padding: 12px 16px;
-  }
-
+  .chat-header { padding: 14px 20px; border-bottom: 0.5px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .chat-header-dot { width: 8px; height: 8px; border-radius: 50%; background: #9FE1CB; animation: pulse 2s ease-in-out infinite; }
+  .chat-header-title { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+  .chat-header-sub { font-size: 12px; color: var(--text-tertiary); margin-left: auto; }
+  .chat-messages { height: 240px; overflow-y: auto; padding: 16px 20px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
+  .msg { max-width: 85%; padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.5; }
+  .msg.bot { background: var(--bg); color: var(--text-primary); border-radius: 4px 12px 12px 12px; align-self: flex-start; }
+  .msg.user { background: var(--text-primary); color: #fff; border-radius: 12px 4px 12px 12px; align-self: flex-end; }
+  .msg.typing { background: var(--bg); align-self: flex-start; border-radius: 4px 12px 12px 12px; padding: 12px 16px; }
   .typing-dots { display: flex; gap: 4px; align-items: center; }
-  .typing-dots span {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--text-tertiary);
-    animation: bounce 1.2s ease-in-out infinite;
-  }
+  .typing-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--text-tertiary); animation: bounce 1.2s ease-in-out infinite; }
   .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
   .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-
-  @keyframes bounce {
-    0%, 60%, 100% { transform: translateY(0); }
-    30% { transform: translateY(-5px); }
-  }
-
-  .chat-input-area {
-    padding: 12px 16px;
-    border-top: 0.5px solid var(--border);
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-
-  .chat-input {
-    flex: 1;
-    padding: 10px 14px;
-    border-radius: var(--radius-sm);
-    border: 0.5px solid var(--border-strong);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    background: var(--bg);
-    color: var(--text-primary);
-    outline: none;
-    transition: border-color 0.15s;
-  }
-
+  @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
+  .chat-input-area { padding: 12px 16px; border-top: 0.5px solid var(--border); display: flex; gap: 8px; align-items: center; }
+  .chat-input { flex:1; padding:10px 14px; border-radius:var(--radius-sm); border:0.5px solid var(--border-strong); font-family:'DM Sans',sans-serif; font-size:14px; background:var(--bg); color:var(--text-primary); outline:none; transition:border-color 0.15s; }
   .chat-input:focus { border-color: rgba(0,0,0,0.3); }
   .chat-input::placeholder { color: var(--text-tertiary); }
-
-  .chat-send {
-    width: 38px; height: 38px;
-    border-radius: var(--radius-sm);
-    border: none;
-    background: var(--text-primary);
-    color: #fff;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
-    transition: opacity 0.15s;
-    flex-shrink: 0;
-  }
-
-  .chat-send:hover { opacity: 0.8; }
-  .chat-send:disabled { opacity: 0.3; cursor: default; }
-
-  .suggestions {
-    padding: 0 16px 12px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .suggestion {
-    padding: 5px 11px;
-    border-radius: 20px;
-    border: 0.5px solid var(--border-strong);
-    font-size: 12px;
-    color: var(--text-secondary);
-    cursor: pointer;
-    background: transparent;
-    font-family: 'DM Sans', sans-serif;
-    transition: background 0.12s;
-  }
-
-  .suggestion:hover { background: var(--bg); }
-
-  /* ── SCHEDULE CARD ── */
-  .schedule-card { padding: 20px 24px; }
-
-  .legend {
-    display: flex; flex-wrap: wrap; gap: 8px;
-    margin-bottom: 20px; padding-bottom: 16px;
-    border-bottom: 0.5px solid var(--border);
-  }
-
-  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text-secondary); }
-  .legend-dot { width: 9px; height: 9px; border-radius: 50%; }
-
-  .tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 16px; }
-
-  .tab {
-    padding: 5px 13px; border-radius: var(--radius-sm);
-    border: 0.5px solid var(--border-strong);
-    font-size: 13px; font-weight: 500; cursor: pointer;
-    background: transparent; color: var(--text-secondary);
-    font-family: 'DM Sans', sans-serif;
-    transition: background 0.12s, color 0.12s;
-  }
-
-  .tab:hover { background: var(--bg); }
-  .tab.active { background: var(--text-primary); color: #fff; border-color: var(--text-primary); }
-
-  .table-label {
-    font-size: 12px; color: var(--text-tertiary);
-    margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
-  }
-
-  .franco-badge {
-    display: inline-block; padding: 2px 8px; border-radius: 20px;
-    font-size: 11px; background: #F4F1EC; color: var(--text-secondary);
-    border: 0.5px solid var(--border-strong);
-  }
-
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-
-  thead th {
-    text-align: left; padding: 6px 8px;
-    font-size: 11px; font-weight: 500; text-transform: uppercase;
-    letter-spacing: 0.07em; color: var(--text-tertiary);
-    border-bottom: 0.5px solid var(--border);
-  }
-
-  tbody td { padding: 6px 8px; border-bottom: 0.5px solid var(--border); vertical-align: middle; }
-  tbody tr:last-child td { border-bottom: none; }
-  tbody tr.current td { background: #F4F1EC; }
-
-  .time-cell {
-    font-family: 'DM Mono', monospace; font-size: 12px;
-    color: var(--text-secondary); white-space: nowrap; width: 56px;
-  }
-
-  .now-indicator {
-    display: inline-block; width: 6px; height: 6px; border-radius: 50%;
-    background: #1A1A18; margin-left: 4px; vertical-align: middle;
-    animation: pulse 1.5s ease-in-out infinite;
-  }
-
-  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-  .pill {
-    display: inline-block; padding: 3px 9px; border-radius: 20px;
-    font-size: 12px; font-weight: 500; margin: 2px 2px 2px 0;
-  }
-
-  .empty { color: var(--text-tertiary); }
-
-  /* API KEY SETUP */
-  .apikey-bar {
-    max-width: 680px; margin: 0 auto 16px;
-    background: #fff8ed;
-    border: 0.5px solid rgba(186,117,23,0.3);
-    border-radius: var(--radius);
-    padding: 12px 16px;
-    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-  }
-
-  .apikey-bar label { font-size: 13px; color: #633806; font-weight: 500; white-space: nowrap; }
-
-  .apikey-input {
-    flex: 1; min-width: 180px;
-    padding: 7px 11px; border-radius: var(--radius-sm);
-    border: 0.5px solid rgba(186,117,23,0.4);
-    font-family: 'DM Mono', monospace; font-size: 12px;
-    background: #fff; color: var(--text-primary); outline: none;
-  }
-
-  .apikey-btn {
-    padding: 7px 14px; border-radius: var(--radius-sm);
-    border: none; background: #633806; color: #fff;
-    font-family: 'DM Sans', sans-serif; font-size: 13px;
-    cursor: pointer; white-space: nowrap;
-  }
-
-  .apikey-btn:hover { opacity: 0.85; }
-  .apikey-ok { font-size: 12px; color: #3B6D11; }
-
-  @media (max-width: 480px) {
-    body { padding: 16px 12px 40px; }
-    .now-card, .schedule-card { padding: 16px; }
-    .avatar-circle { width: 48px; height: 48px; font-size: 14px; }
-    .chat-messages { height: 200px; }
-  }
+  .chat-send { width:38px; height:38px; border-radius:var(--radius-sm); border:none; background:var(--text-primary); color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:16px; transition:opacity 0.15s; flex-shrink:0; }
+  .chat-send:hover { opacity:0.8; }
+  .chat-send:disabled { opacity:0.3; cursor:default; }
+  .suggestions { padding:0 16px 12px; display:flex; flex-wrap:wrap; gap:6px; }
+  .suggestion { padding:5px 11px; border-radius:20px; border:0.5px solid var(--border-strong); font-size:12px; color:var(--text-secondary); cursor:pointer; background:transparent; font-family:'DM Sans',sans-serif; transition:background 0.12s; }
+  .suggestion:hover { background:var(--bg); }
+  .schedule-card { padding:20px 24px; }
+  .legend { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; padding-bottom:16px; border-bottom:0.5px solid var(--border); }
+  .legend-item { display:flex; align-items:center; gap:5px; font-size:12px; color:var(--text-secondary); }
+  .legend-dot { width:9px; height:9px; border-radius:50%; }
+  .tabs { display:flex; gap:4px; flex-wrap:wrap; margin-bottom:16px; }
+  .tab { padding:5px 13px; border-radius:var(--radius-sm); border:0.5px solid var(--border-strong); font-size:13px; font-weight:500; cursor:pointer; background:transparent; color:var(--text-secondary); font-family:'DM Sans',sans-serif; transition:background 0.12s,color 0.12s; }
+  .tab:hover { background:var(--bg); }
+  .tab.active { background:var(--text-primary); color:#fff; border-color:var(--text-primary); }
+  .table-label { font-size:12px; color:var(--text-tertiary); margin-bottom:10px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .franco-badge { display:inline-block; padding:2px 8px; border-radius:20px; font-size:11px; background:#F4F1EC; color:var(--text-secondary); border:0.5px solid var(--border-strong); }
+  .note-badge { display:inline-block; padding:2px 8px; border-radius:20px; font-size:11px; background:#fff8ed; color:#633806; border:0.5px solid rgba(186,117,23,0.3); }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  thead th { text-align:left; padding:6px 8px; font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:0.07em; color:var(--text-tertiary); border-bottom:0.5px solid var(--border); }
+  tbody td { padding:6px 8px; border-bottom:0.5px solid var(--border); vertical-align:middle; }
+  tbody tr:last-child td { border-bottom:none; }
+  tbody tr.current td { background:#F4F1EC; }
+  .time-cell { font-family:'DM Mono',monospace; font-size:12px; color:var(--text-secondary); white-space:nowrap; width:56px; }
+  .now-indicator { display:inline-block; width:6px; height:6px; border-radius:50%; background:#1A1A18; margin-left:4px; vertical-align:middle; animation:pulse 1.5s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .pill { display:inline-block; padding:3px 9px; border-radius:20px; font-size:12px; font-weight:500; margin:2px 2px 2px 0; }
+  .empty { color:var(--text-tertiary); }
+  @media(max-width:480px){ body{padding:16px 12px 40px} .now-card,.schedule-card{padding:16px} .avatar-circle{width:48px;height:48px;font-size:14px} .chat-messages{height:200px} }
 </style>
 </head>
 <body>
-
+ 
 <header><h1>¿Quién está hoy? — Punto Terra</h1></header>
-
-<!-- NOW CARD -->
+ 
 <div class="card now-card">
   <div class="now-header">
     <span class="now-label">En el negocio ahora</span>
     <span class="now-datetime" id="now-time"></span>
   </div>
   <div class="now-people" id="now-people"></div>
+  <div id="now-note"></div>
 </div>
-
-
-
-<!-- CHATBOT CARD -->
+ 
 <div class="card chat-card">
   <div class="chat-header">
     <div class="chat-header-dot"></div>
@@ -361,21 +97,20 @@
     <span class="chat-header-sub">Preguntá en lenguaje natural</span>
   </div>
   <div class="chat-messages" id="chat-messages">
-    <div class="msg bot">Hola! Preguntame lo que quieras sobre el horario. Por ejemplo: <em>"¿Quién está el sábado a la mañana?"</em> o <em>"¿A qué hora entra Jose el viernes?"</em></div>
+    <div class="msg bot">Hola! Preguntame lo que quieras sobre el horario. Por ejemplo: <em>"¿Quién está el sábado a la mañana?"</em> o <em>"¿Cuándo trabaja Majo?"</em></div>
   </div>
   <div class="suggestions">
     <button class="suggestion" onclick="askSuggestion(this)">¿Quién está ahora?</button>
-    <button class="suggestion" onclick="askSuggestion(this)">¿Quién trabaja el domingo a la tarde?</button>
+    <button class="suggestion" onclick="askSuggestion(this)">¿Quién trabaja el domingo?</button>
     <button class="suggestion" onclick="askSuggestion(this)">¿Cuándo trabaja Chape?</button>
-    <button class="suggestion" onclick="askSuggestion(this)">¿Quién abre el sábado?</button>
+    <button class="suggestion" onclick="askSuggestion(this)">¿Quién cierra el viernes?</button>
   </div>
   <div class="chat-input-area">
     <input class="chat-input" id="chat-input" type="text" placeholder="Preguntá algo sobre el horario..." onkeydown="if(event.key==='Enter') sendMsg()" />
     <button class="chat-send" id="chat-send" onclick="sendMsg()">↑</button>
   </div>
 </div>
-
-<!-- SCHEDULE CARD -->
+ 
 <div class="card schedule-card">
   <div class="legend" id="legend"></div>
   <div class="tabs" id="tabs"></div>
@@ -385,230 +120,249 @@
     <tbody id="tbody"></tbody>
   </table>
 </div>
-
+ 
 <script>
-// ── DATA ──────────────────────────────────────────────
 const COLORS = {
-  Isa:    { bg:'#9FE1CB', text:'#085041' },
-  Jose:   { bg:'#B5D4F4', text:'#0C447C' },
-  Dani:   { bg:'#FAC775', text:'#633806' },
-  Yane:   { bg:'#F4C0D1', text:'#72243E' },
-  Chape:  { bg:'#AFA9EC', text:'#26215C' },
-  Eli:    { bg:'#F5C4B3', text:'#4A1B0C' },
-  Paulina:{ bg:'#C0DD97', text:'#173404' },
-  Cande:  { bg:'#D3D1C7', text:'#2C2C2A' },
+  Isa:   {bg:'#9FE1CB',text:'#085041'},
+  Yane:  {bg:'#F4C0D1',text:'#72243E'},
+  Dani:  {bg:'#FAC775',text:'#633806'},
+  Majo:  {bg:'#AFA9EC',text:'#26215C'},
+  Eli:   {bg:'#F5C4B3',text:'#4A1B0C'},
+  Pauli: {bg:'#C0DD97',text:'#173404'},
+  Chape: {bg:'#B5D4F4',text:'#0C447C'},
+  Cande: {bg:'#D3D1C7',text:'#2C2C2A'},
 };
-
-const FRANCO = { Lunes:'Isa', Martes:'Jose', Miercoles:'Yane' };
-const DAY_ORDER = ['Lunes','Martes','Miercoles','Jueves','Viernes','Sab','Domingo'];
-const DAY_LABELS = { Lunes:'Lunes', Martes:'Martes', Miercoles:'Miércoles', Jueves:'Jueves', Viernes:'Viernes', Sab:'Sábado', Domingo:'Domingo' };
-const JS_DAYS = ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sab'];
-const SLOTS = ['07:30','08:30','09:30','10:30','11:30','12:30','13:30','14:30','15:30','16:30','17:30','18:30','19:30','20:30','21:30','22:30','23:30','00:30'];
-
-const RAW = {
-  Lunes:     {'07:30':['Isa'],'08:30':['Isa'],'09:30':['Isa'],'10:30':['Isa'],'11:30':['Isa'],'12:30':['Isa'],'13:30':['Isa'],'14:30':['Isa'],'15:30':['Isa'],'16:30':['Dani','Yane'],'17:30':['Dani','Yane'],'18:30':['Dani','Yane'],'19:30':['Dani','Yane'],'20:30':['Dani','Yane'],'21:30':['Dani','Yane'],'22:30':['Dani','Yane'],'23:30':['Dani','Yane']},
-  Martes:    {'07:30':['Jose'],'08:30':['Jose'],'09:30':['Jose'],'10:30':['Jose'],'11:30':['Jose'],'12:30':['Jose'],'13:30':['Jose'],'14:30':['Jose'],'15:30':['Jose'],'16:30':['Yane','Dani'],'17:30':['Yane','Dani'],'18:30':['Yane','Dani'],'19:30':['Yane','Dani'],'20:30':['Yane','Dani'],'21:30':['Yane','Dani'],'22:30':['Yane','Dani'],'23:30':['Yane','Dani']},
-  Miercoles: {'07:30':['Isa'],'08:30':['Isa'],'09:30':['Isa'],'10:30':['Isa'],'11:30':['Isa'],'12:30':['Isa'],'13:30':['Isa'],'14:30':['Isa'],'15:30':['Isa'],'16:30':['Jose','Dani'],'17:30':['Jose','Dani'],'18:30':['Jose','Dani'],'19:30':['Jose','Dani'],'20:30':['Jose','Dani'],'21:30':['Jose','Dani'],'22:30':['Jose','Dani'],'23:30':['Jose','Dani']},
-  Jueves:    {'07:30':['Isa'],'08:30':['Isa'],'09:30':['Isa'],'10:30':['Isa'],'11:30':['Isa'],'12:30':['Isa'],'13:30':['Isa'],'14:30':['Isa'],'15:30':['Isa'],'16:30':['Yane','Jose'],'17:30':['Yane','Jose'],'18:30':['Yane','Jose'],'19:30':['Yane','Jose'],'20:30':['Yane','Jose'],'21:30':['Yane','Jose'],'22:30':['Yane','Jose'],'23:30':['Yane','Jose']},
-  Viernes:   {'07:30':['Isa'],'08:30':['Isa'],'09:30':['Isa'],'10:30':['Isa'],'11:30':['Isa'],'12:30':['Isa'],'13:30':['Isa'],'14:30':['Isa'],'15:30':['Isa'],'16:30':['Jose','Yane','Chape','Eli'],'17:30':['Jose','Yane','Chape','Eli'],'18:30':['Jose','Yane','Chape','Eli'],'19:30':['Jose','Yane','Chape','Eli'],'20:30':['Jose','Yane','Chape','Eli'],'21:30':['Jose','Yane','Chape','Eli'],'22:30':['Jose','Yane'],'23:30':['Jose','Yane'],'00:30':['Jose','Yane']},
-  Sab:       {'07:30':['Isa','Paulina'],'08:30':['Isa','Paulina'],'09:30':['Isa','Dani','Cande','Paulina'],'10:30':['Isa','Dani','Cande','Paulina'],'11:30':['Isa','Dani','Cande','Paulina'],'12:30':['Isa','Dani','Cande','Paulina'],'13:30':['Isa','Paulina'],'14:30':['Isa','Paulina'],'15:30':['Isa','Paulina'],'16:30':['Jose','Yane','Dani','Eli'],'17:30':['Jose','Yane','Dani','Eli'],'18:30':['Jose','Yane','Dani','Eli'],'19:30':['Jose','Yane','Dani','Eli'],'20:30':['Jose','Yane','Dani','Eli'],'21:30':['Jose','Yane','Dani','Eli'],'22:30':['Jose','Yane'],'23:30':['Jose','Yane']},
-  Domingo:   {'07:30':['Isa','Paulina'],'08:30':['Isa','Paulina'],'09:30':['Isa','Chape','Cande','Paulina'],'10:30':['Isa','Chape','Cande','Paulina'],'11:30':['Isa','Chape','Cande','Paulina'],'12:30':['Isa','Chape','Cande','Paulina'],'13:30':['Isa','Paulina'],'14:30':['Isa','Paulina'],'15:30':['Isa','Paulina'],'16:30':['Jose','Yane','Chape','Eli'],'17:30':['Jose','Yane','Chape','Eli'],'18:30':['Jose','Yane','Chape','Eli'],'19:30':['Jose','Yane','Chape','Eli'],'20:30':['Jose','Yane','Chape','Eli'],'21:30':['Jose','Yane','Chape','Eli'],'22:30':['Jose','Yane'],'23:30':['Jose','Yane']},
-};
-
-// ── SCHEDULE HELPERS ──────────────────────────────────
-function slotMins(slot) {
-  const [h, m] = slot.split(':').map(Number);
-  return (h === 0 ? 1440 : h * 60) + m;
+ 
+const DAY_ORDER  = ['Lunes','Martes','Miercoles','Jueves','Viernes','Sab','Domingo'];
+const DAY_LABELS = {Lunes:'Lunes',Martes:'Martes',Miercoles:'Miércoles',Jueves:'Jueves',Viernes:'Viernes',Sab:'Sábado',Domingo:'Domingo'};
+const JS_DAYS    = ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sab'];
+ 
+const FRANCO_LABELS = {Miercoles:'Franco: Isa', Martes:'Franco: Yane', Lunes:'Franco: Majo', Jueves:'Franco: Dani', Viernes:'Franco: Dani'};
+ 
+const SLOTS = [
+  '07:00','07:30','08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30',
+  '12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30',
+  '17:00','17:30','18:00','18:30','19:00','19:30','20:00','20:30','21:00','21:30',
+  '22:00','22:30','23:00','23:30','00:00','00:30'
+];
+ 
+// Helper: generate slots for a range
+function slotsInRange(from, to, people, base) {
+  // from/to in "HH:MM", to is exclusive end (first slot NOT included)
+  SLOTS.forEach(s => {
+    const sm = slotMins(s);
+    const fm = slotMins(from);
+    let tm = slotMins(to);
+    if (tm <= fm) tm += 1440; // overnight
+    const sm2 = sm < fm ? sm + 1440 : sm;
+    if (sm2 >= fm && sm2 < tm) {
+      if (!base[s]) base[s] = [];
+      people.forEach(p => { if (!base[s].includes(p)) base[s].push(p); });
+    }
+  });
 }
-
-function getCurrentSlot(h, m) {
-  const now = (h === 0 ? 1440 : h * 60) + m;
-  let best = null;
-  for (const s of SLOTS) { if (slotMins(s) <= now) best = s; }
+ 
+function buildDay(ranges) {
+  const base = {};
+  ranges.forEach(([from, to, people]) => slotsInRange(from, to, people, base));
+  return base;
+}
+ 
+const RAW = {
+  Lunes: buildDay([
+    ['07:30','09:00',['Isa','Cande']],
+    ['09:00','15:30',['Isa']],
+    ['15:30','23:30',['Yane','Dani']],  // Majo franco lunes
+  ]),
+  Martes: buildDay([
+    ['07:30','09:00',['Isa','Cande']],
+    ['09:00','15:30',['Isa']],
+    ['15:30','23:30',['Dani','Majo']], // Yane franco martes
+  ]),
+  Miercoles: buildDay([
+    ['07:30','15:30',['Yane','Majo']], // Isa franco miércoles
+    ['15:30','23:30',['Yane','Dani']], // Majo sale a las 15:30 en miércoles (turno mañana 7:30-15:30)
+  ]),
+  Jueves: buildDay([
+    ['07:30','09:00',['Isa','Cande']],
+    ['09:00','15:30',['Isa']],
+    ['15:30','17:00',['Yane','Majo']],       // Dani franco jueves
+    ['17:00','21:00',['Yane','Majo','Eli']],
+    ['21:00','23:30',['Yane','Majo']],
+  ]),
+  Viernes: buildDay([
+    ['07:30','09:00',['Isa','Cande']],
+    ['09:00','15:30',['Isa']],
+    ['15:30','17:00',['Yane','Majo']],           // Dani franco viernes
+    ['17:00','21:00',['Yane','Majo','Eli','Chape']],
+    ['21:00','00:30',['Yane','Majo']],
+  ]),
+  Sab: buildDay([
+    ['07:00','07:30',['Cande']],
+    ['07:30','09:00',['Isa','Pauli','Cande']],
+    ['09:00','12:00',['Isa','Pauli','Dani']],
+    ['12:00','15:30',['Isa','Pauli']],
+    ['15:30','16:00',['Yane','Majo']],
+    ['16:00','17:00',['Yane','Majo','Dani','Eli']],
+    ['17:00','21:00',['Yane','Majo','Dani','Eli','Cande']],
+    ['21:00','00:30',['Yane','Majo']],
+  ]),
+  Domingo: buildDay([
+    ['07:00','11:00',['Isa','Pauli','Yane','Cande']],
+    ['11:00','15:30',['Isa','Pauli','Yane']],
+    ['15:30','16:00',['Yane','Majo']],
+    ['16:00','21:00',['Yane','Majo','Eli','Chape']],
+    ['21:00','23:30',['Yane','Majo']],
+  ]),
+};
+ 
+function slotMins(slot) {
+  const [h,m] = slot.split(':').map(Number);
+  return (h===0?1440:h*60)+m;
+}
+ 
+function getCurrentSlot(h,m) {
+  const now=(h===0?1440:h*60)+m;
+  let best=null;
+  for(const s of SLOTS){ if(slotMins(s)<=now) best=s; }
   return best;
 }
-
+ 
 function getNow() {
-  const d = new Date();
-  const h = d.getHours(), m = d.getMinutes();
-  const pad = n => String(n).padStart(2,'0');
-  return { dayName: JS_DAYS[d.getDay()], h, m, timeStr: `${pad(h)}:${pad(m)}` };
+  const d=new Date(), h=d.getHours(), m=d.getMinutes();
+  const pad=n=>String(n).padStart(2,'0');
+  return {dayName:JS_DAYS[d.getDay()],h,m,timeStr:`${pad(h)}:${pad(m)}`};
 }
-
+ 
 function pill(name) {
-  const c = COLORS[name] || { bg:'#D3D1C7', text:'#2C2C2A' };
+  const c=COLORS[name]||{bg:'#D3D1C7',text:'#2C2C2A'};
   return `<span class="pill" style="background:${c.bg};color:${c.text}">${name}</span>`;
 }
-
+ 
 function avatar(name) {
-  const c = COLORS[name] || { bg:'#D3D1C7', text:'#2C2C2A' };
+  const c=COLORS[name]||{bg:'#D3D1C7',text:'#2C2C2A'};
   return `<div class="avatar"><div class="avatar-circle" style="background:${c.bg};color:${c.text}">${name.slice(0,2).toUpperCase()}</div><div class="avatar-name">${name}</div></div>`;
 }
-
-// ── RENDER NOW ─────────────────────────────────────────
+ 
 function renderNow() {
-  const { dayName, h, m, timeStr } = getNow();
-  document.getElementById('now-time').textContent = `${DAY_LABELS[dayName] || dayName} ${timeStr}`;
-  const slot = getCurrentSlot(h, m);
-  const all = slot ? ((RAW[dayName] || {})[slot] || []) : [];
-  const franco = FRANCO[dayName];
-  const active = all.filter(p => p !== franco);
-  document.getElementById('now-people').innerHTML = active.length === 0
-    ? `<span class="now-empty">Nadie en turno en este momento</span>`
-    : active.map(avatar).join('');
+  const {dayName,h,m,timeStr}=getNow();
+  document.getElementById('now-time').textContent=`${DAY_LABELS[dayName]||dayName} ${timeStr}`;
+  const slot=getCurrentSlot(h,m);
+  const all=slot?((RAW[dayName]||{})[slot]||[]):[];
+  document.getElementById('now-people').innerHTML=all.length===0
+    ?`<span class="now-empty">Nadie en turno en este momento</span>`
+    :all.map(avatar).join('');
+  document.getElementById('now-note').innerHTML=dayName==='Domingo'
+    ?`<p class="now-note">⚠️ Los domingos Dani/Isa/Yane tienen rotación — uno puede no estar.</p>`:'';
 }
-
-// ── RENDER SCHEDULE ────────────────────────────────────
+ 
 function renderLegend() {
-  document.getElementById('legend').innerHTML = Object.entries(COLORS).map(([n,c]) =>
+  document.getElementById('legend').innerHTML=Object.entries(COLORS).map(([n,c])=>
     `<div class="legend-item"><div class="legend-dot" style="background:${c.bg}"></div>${n}</div>`
   ).join('');
 }
-
+ 
 function renderTabs(sel) {
-  document.getElementById('tabs').innerHTML = DAY_ORDER.map(d =>
+  document.getElementById('tabs').innerHTML=DAY_ORDER.map(d=>
     `<button class="tab ${d===sel?'active':''}" onclick="selectDay('${d}')">${DAY_LABELS[d]}</button>`
   ).join('');
 }
-
+ 
 function renderTable(dayName) {
-  const { dayName: today, h, m } = getNow();
-  const currentSlot = dayName === today ? getCurrentSlot(h, m) : null;
-  const franco = FRANCO[dayName];
-  let lbl = DAY_LABELS[dayName];
-  if (franco) lbl += ` <span class="franco-badge">Franco: ${franco}</span>`;
-  document.getElementById('table-label').innerHTML = lbl;
-
-  document.getElementById('tbody').innerHTML = SLOTS.map(slot => {
-    const people = (RAW[dayName] || {})[slot] || [];
-    const isCurrent = slot === currentSlot;
-    const timeCell = isCurrent
-      ? `<td class="time-cell">${slot}<span class="now-indicator"></span></td>`
-      : `<td class="time-cell">${slot}</td>`;
-    const peopleCells = people.length === 0
-      ? `<td class="empty">—</td>`
-      : `<td>${people.map(pill).join('')}</td>`;
-    return `<tr class="${isCurrent?'current':''}">${timeCell}${peopleCells}</tr>`;
+  const {dayName:today,h,m}=getNow();
+  const currentSlot=dayName===today?getCurrentSlot(h,m):null;
+  let lbl=DAY_LABELS[dayName];
+  if(FRANCO_LABELS[dayName]) lbl+=` <span class="franco-badge">${FRANCO_LABELS[dayName]}</span>`;
+  if(dayName==='Domingo') lbl+=` <span class="note-badge">Rotativo Dani/Isa/Yane</span>`;
+  document.getElementById('table-label').innerHTML=lbl;
+ 
+  const activeSlots=SLOTS.filter(s=>(RAW[dayName]||{})[s]&&RAW[dayName][s].length>0);
+  document.getElementById('tbody').innerHTML=activeSlots.map(slot=>{
+    const people=(RAW[dayName]||{})[slot]||[];
+    const isCurrent=slot===currentSlot;
+    const timeCell=isCurrent
+      ?`<td class="time-cell">${slot}<span class="now-indicator"></span></td>`
+      :`<td class="time-cell">${slot}</td>`;
+    return `<tr class="${isCurrent?'current':''}">${timeCell}<td>${people.map(pill).join('')}</td></tr>`;
   }).join('');
 }
-
-let selectedDay = getNow().dayName;
-if (!RAW[selectedDay]) selectedDay = 'Lunes';
-
-function selectDay(day) {
-  selectedDay = day;
-  renderTabs(day);
-  renderTable(day);
+ 
+let selectedDay=getNow().dayName;
+if(!RAW[selectedDay]) selectedDay='Lunes';
+ 
+function selectDay(day){ selectedDay=day; renderTabs(day); renderTable(day); }
+function tick(){ renderNow(); renderTable(selectedDay); }
+ 
+// CHATBOT
+const API_KEY='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';
+ 
+const SYSTEM_PROMPT=`Sos el asistente de horarios de Punto Terra. Respondés preguntas sobre quién trabaja cada día.
+ 
+HORARIO ACTUALIZADO:
+ 
+DANI: Lunes a miércoles 15:30–23:30. Jueves y viernes FRANCO. Sábado: 9:00–12:00 y 16:00–21:00. Domingo: rotativo (1 de cada 3 no está, comparte con Isa y Yane).
+ 
+ISA (turno mañana): Lunes a domingo 7:30–15:30. Miércoles FRANCO.
+ 
+YANE (turno tarde): Lunes a domingo 15:30–23:30 (viernes y sábado hasta 00:30). Martes FRANCO.
+ 
+MAJO: Lunes FRANCO. Martes 15:30–23:30. Miércoles 7:30–15:30. Jueves 15:30–23:30. Viernes 15:30–00:30. Sábado 15:30–00:30. Domingo 15:30–23:30.
+ 
+ELI: Jueves y viernes 17:00–21:00. Sábado y domingo 16:00–21:00.
+ 
+PAULI: Sábado y domingo 7:30–15:30.
+ 
+CHAPE: Viernes 17:00–21:00. Domingo 16:00–21:00.
+ 
+CANDE: Lunes/martes/jueves/viernes/sábado 7:30–9:00. Sábado también 17:00–21:00. Domingo 7:00–11:00.
+ 
+FRANCOS: Isa miércoles, Yane martes, Majo lunes, Dani jueves y viernes.
+ 
+Respondé breve y natural en español rioplatense. Si preguntan por el domingo, mencioná la rotación de Dani/Isa/Yane.`;
+ 
+const chatHistory=[];
+ 
+function addMsg(text,role){
+  const div=document.createElement('div');
+  div.className=`msg ${role}`; div.textContent=text;
+  const c=document.getElementById('chat-messages');
+  c.appendChild(div); c.scrollTop=c.scrollHeight;
 }
-
-function tick() { renderNow(); renderTable(selectedDay); }
-
-// ── API KEY ────────────────────────────────────────────
-const API_KEY = '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';
-
-// ── CHATBOT ────────────────────────────────────────────
-const SYSTEM_PROMPT = `Sos el asistente de horarios de Punto Terra. Respondés preguntas sobre quién trabaja cada día, a qué hora entra y sale cada persona, y cualquier consulta relacionada con el horario del negocio.
-
-HORARIO COMPLETO:
-
-LUNES: Isa trabaja de 07:30 a 15:30 (es su día de franco — NO está en el negocio aunque el horario la muestre). Dani y Yane trabajan de 16:30 a 23:30.
-MARTES: Jose trabaja de 07:30 a 15:30 (es su día de franco). Yane y Dani trabajan de 16:30 a 23:30.
-MIÉRCOLES: Isa trabaja de 07:30 a 15:30. Jose y Dani trabajan de 16:30 a 23:30. Yane tiene franco.
-JUEVES: Isa trabaja de 07:30 a 15:30. Yane y Jose trabajan de 16:30 a 23:30.
-VIERNES: Isa trabaja de 07:30 a 15:30. Jose, Yane, Chape y Eli trabajan de 16:30 a 21:30. De 22:30 a 00:30 quedan Jose y Yane.
-SÁBADO: Isa y Paulina abren de 07:30. A las 09:30 se suman Dani y Cande (están hasta las 12:30). De 13:30 a 15:30 quedan Isa y Paulina. De 16:30 a 21:30: Jose, Yane, Dani y Eli. De 22:30 a 23:30: Jose y Yane.
-DOMINGO: Isa y Paulina abren de 07:30. A las 09:30 se suman Chape y Cande (están hasta las 12:30). De 13:30 a 15:30 quedan Isa y Paulina. De 16:30 a 21:30: Jose, Yane, Chape y Eli. De 22:30 a 23:30: Jose y Yane.
-
-FRANCOS: Isa franco los lunes, Jose franco los martes, Yane franco los miércoles.
-
-Respondé de forma breve, clara y natural en español. Sin listas innecesarias, como si fuera una conversación.`;
-
-const chatHistory = [];
-
-function addMsg(text, role) {
-  const div = document.createElement('div');
-  div.className = `msg ${role}`;
-  div.textContent = text;
-  const container = document.getElementById('chat-messages');
-  container.appendChild(div);
-  container.scrollTop = container.scrollHeight;
-  return div;
+ 
+function addTyping(){
+  const div=document.createElement('div');
+  div.className='msg typing'; div.id='typing-indicator';
+  div.innerHTML='<div class="typing-dots"><span></span><span></span><span></span></div>';
+  const c=document.getElementById('chat-messages');
+  c.appendChild(div); c.scrollTop=c.scrollHeight;
 }
-
-function addTyping() {
-  const div = document.createElement('div');
-  div.className = 'msg typing';
-  div.id = 'typing-indicator';
-  div.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
-  const container = document.getElementById('chat-messages');
-  container.appendChild(div);
-  container.scrollTop = container.scrollHeight;
-}
-
-function removeTyping() {
-  const el = document.getElementById('typing-indicator');
-  if (el) el.remove();
-}
-
-async function sendMsg() {
-  const input = document.getElementById('chat-input');
-  const text = input.value.trim();
-  if (!text) return;
-
-  input.value = '';
-  document.getElementById('chat-send').disabled = true;
-
-  addMsg(text, 'user');
-  chatHistory.push({ role: 'user', content: text });
-
+ 
+function removeTyping(){ const el=document.getElementById('typing-indicator'); if(el) el.remove(); }
+ 
+async function sendMsg(){
+  const input=document.getElementById('chat-input');
+  const text=input.value.trim(); if(!text) return;
+  input.value=''; document.getElementById('chat-send').disabled=true;
+  addMsg(text,'user'); chatHistory.push({role:'user',content:text});
   addTyping();
-
-  try {
-    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${API_KEY}`
-      },
-      body: JSON.stringify({
-        model: 'llama-3.1-8b-instant',
-        max_tokens: 400,
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          ...chatHistory
-        ]
-      })
+  try{
+    const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':`Bearer ${API_KEY}`},
+      body:JSON.stringify({model:'llama-3.1-8b-instant',max_tokens:400,messages:[{role:'system',content:SYSTEM_PROMPT},...chatHistory]})
     });
-
-    const data = await res.json();
-    removeTyping();
-
-    if (data.error) {
-      addMsg('Error: ' + data.error.message, 'bot');
-    } else {
-      const reply = data.choices[0].message.content;
-      addMsg(reply, 'bot');
-      chatHistory.push({ role: 'assistant', content: reply });
-    }
-  } catch (e) {
-    removeTyping();
-    addMsg('No pude conectarme. Revisá tu API key o la conexión.', 'bot');
-  }
-
-  document.getElementById('chat-send').disabled = false;
-  input.focus();
+    const data=await res.json(); removeTyping();
+    if(data.error){ addMsg('Error: '+data.error.message,'bot'); }
+    else{ const r=data.choices[0].message.content; addMsg(r,'bot'); chatHistory.push({role:'assistant',content:r}); }
+  }catch(e){ removeTyping(); addMsg('No pude conectarme. Revisá la conexión.','bot'); }
+  document.getElementById('chat-send').disabled=false;
+  document.getElementById('chat-input').focus();
 }
-
-function askSuggestion(btn) {
-  document.getElementById('chat-input').value = btn.textContent;
-  sendMsg();
-}
-
-// ── INIT ───────────────────────────────────────────────
-renderLegend();
-renderTabs(selectedDay);
-tick();
-setInterval(tick, 30000);
+ 
+function askSuggestion(btn){ document.getElementById('chat-input').value=btn.textContent; sendMsg(); }
+ 
+renderLegend(); renderTabs(selectedDay); tick(); setInterval(tick,30000);
 </script>
 </body>
 </html>
+ 
